@@ -1,7 +1,7 @@
 
 -- TGL Reload
--- scootahoof (ishido.uu@gmail.com), 2013
--- Заглавный экран
+-- icefairy64 (ishido.uu@gmail.com), 2013
+-- Стартовый экран
 
 local title = {}
 local stars = {}

@@ -1,20 +1,19 @@
 
 -- TGL Reload
--- scootahoof (ishido.uu@gmail.com), 2013
+-- icefairy64 (ishido.uu@gmail.com), 2013
 -- Главный модуль
 
-print('Loading HUMP')
 gamestate = require "hump.gamestate"
 vector = require "hump.vector"
 camera = require "hump.camera"
 timer = require "hump.timer"
 
-print('Loading HardonCollider')
 hc = require "HardonCollider"
 
-print('Loading title screen')
+baseObject = require "objects.base"
+player0 = require "objects.player"
+
 title = require "title"
-print('Loading Labyrinth')
 labyrinth = require "labyrinth"
 
 -- Глобальные переменные

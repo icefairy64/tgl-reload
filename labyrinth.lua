@@ -1,6 +1,6 @@
 
 -- TGL Reload
--- scootahoof (ishido.uu@gmail.com), 2013
+-- icefairy64 (ishido.uu@gmail.com), 2013
 -- Лабиринт
 
 local level = {}
@@ -9,27 +9,19 @@ hold = {0, 0, 0, 0}
 
 -- Столкновения
 
--- Состояния: 0 - плавает, 1 - стоит, 2 - идет, 3 - бежит
+-- Состояния: 1 - стоит, 2 - идет, 3 - бежит
 
 function on_collide(dt, shape_one, shape_two, dx, dy)
-  if shape_one == player or shape_two == player then
+  if shape_one == player.shape or shape_two == player.shape then
     -- Игрок vs Другой Объект
-    if shape_one == player then
+    if shape_one == player.shape then
       other = shape_two
       ddx, ddy = dx, dy
     else
       other = shape_one
       ddx, ddy = -dx, -dy
     end
-    -- Ограничение вектора скорости по одной из осей
-    if math.abs(dx) > 0 then
-      player.vel = player.vel:permul(vector(0, 1))
-    end
-    if math.abs(dy) > 0 then
-      player.vel = player.vel:permul(vector(1, 0))
-    end
-    -- Устранение столкновения
-    player:move(ddx, ddy)
+    player:collide(other, ddx, ddy)
   end
 end
 
@@ -79,7 +71,6 @@ function level:keyreleased(key)
       if player.state > 1 then 
         player.state = 1 
       end
-      player.prevstate = 1
     end
   end
 end
@@ -92,7 +83,11 @@ end
 -- Выход
 function level:leave()
   for i = 1, #objects do
+    collider:remove(objects[i].shape)
     objects[i] = nil
+  end
+  for i = 1, #objects do
+    table:remove()
   end
 end
 
@@ -101,21 +96,12 @@ function level:enter()
   collider = hc(100, on_collide, end_collide)
   
   -- Создание объекта игрока
-  player = collider:addRectangle(300, 200, 48, 32)
-  player.vel = vector(0, 0)
-  player.delta = vector(0, 0)
-  player.state = 1
-  player.prevstate = 1
-  player.maxspeed = 300
-  player.acc = 70
-  
-  -- Создание тестового препятствия
-  cube = collider:addRectangle(400, 100, 200, 100)
-  cube.h = 64
+  player = player0(300, 200)
   
   -- Добавление объектов в таблицу
   table.insert(objects, player)
-  table.insert(objects, cube)
+  table.insert(objects, baseObject(400, 100, 200, 100, "terrain"))
+  table.insert(objects, baseObject(-100, -100, 300, 300, "terrain"))
   
   -- Плавный переход
   fade = {255, 255, 255, 255}
@@ -126,7 +112,7 @@ end
 function level:draw()
   if #objects > 0 then
     for id, object in pairs(objects) do
-      object:draw('line')
+      object.shape:draw('line')
     end
   end
 end
@@ -135,7 +121,7 @@ end
 function level:update(dt)
   -- Ускорение
   if player.state > 1 then player.vel = player.vel + player.delta * player.acc end
-  player:move((player.vel * dt):unpack())
+  player.shape:move((player.vel * dt):unpack())
   
   -- Ограничение скорости
   if player.vel:len() > player.maxspeed then player.vel = player.vel:normalized() * player.maxspeed end
@@ -144,7 +130,7 @@ function level:update(dt)
   if player.state == 1 then player.vel = player.vel * 0.92 end
   
   -- Плавное перемещение камеры
-  local d = vector(player:center()) - vector(cam:pos())
+  local d = vector(player.shape:center()) - vector(cam:pos())
   local dist = d:len()
   cam:move((d:normalized() * (dist / 30)):unpack())
   

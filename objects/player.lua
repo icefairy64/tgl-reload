@@ -15,6 +15,8 @@ function player:collide(objectShape, dx, dy)
   if math.abs(dy) > 0 then
     self.vel = self.vel:permul(vector(1, 0))
   end
+  -- Выключение бега
+  if self.state == 3 then self.state = 2 end
   -- Устранение столкновения
   self.shape:move(dx, dy)
 end
@@ -31,13 +33,14 @@ function player:create(x, y)
   --player.type = "player"
   --collider:addToGroup(player.type, player.shape)
   --player = setmetatable(baseObject(x, y, 48, 32, "player"), player)
-  player.vel = vector(0, 0)
-  player.delta = vector(0, 0)
-  player.state = 1
-  player.maxspeed = 300
-  player.runMult = 1.6
-  player.acc = 70
-  return setmetatable(baseObject(x, y, 48, 32, "player"), player)
+  local fields = baseObject(x, y, 48, 32, "player")
+  fields.vel = vector(0, 0)
+  fields.delta = vector(0, 0)
+  fields.state = 1
+  fields.maxspeed = 300
+  fields.runMult = 1.6
+  fields.acc = 70
+  return setmetatable(fields, player)
 end
 
 -- Модуль

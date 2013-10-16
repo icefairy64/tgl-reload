@@ -33,27 +33,17 @@ end
 
 -- Обработка нажатия клавиш
 function level:keypressed(key)
-  if key == 'left' then
-    player.delta = player.delta + vector(-1, 0)
-    if player.state ~= 0 then player.state = 2 end
-    hold[1] = 1
+  if key == 'left' or key == 'right' or key == 'up' or key == 'down' then
+    if player.state ~= 0 then if player.state < 3 then player.state = 2 else player.state = 3 end end
   end
-  if key == 'right' then
-    player.delta = player.delta + vector(1, 0)
-    if player.state ~= 0 then player.state = 2 end
-    hold[2] = 1
+  if key == 'left' then  hold[1] = 1 end
+  if key == 'right' then hold[2] = 1 end
+  if key == 'up' then    hold[3] = 1 end
+  if key == 'down' then  hold[4] = 1 end
+  -- Бег
+  if key == 'lshift' then
+     if player.state == 2 then player.state = 3 end
   end
-  if key == 'up' then
-    player.delta = player.delta + vector(0, -1)
-    if player.state ~= 0 then player.state = 2 end
-    hold[3] = 1
-  end
-  if key == 'down' then
-    player.delta = player.delta + vector(0, 1)
-    if player.state ~= 0 then player.state = 2 end
-    hold[4] = 1
-  end
-  player.delta = player.delta:normalized()
 end
 
 -- Обработка нажатия клавиш
@@ -62,6 +52,7 @@ function level:keyreleased(key)
   if key == 'right' then 	hold[2] = 0 player.delta = player.delta - vector(0.5, 0) end
   if key == 'up' then 		hold[3] = 0 player.delta = player.delta - vector(0, -0.5) end
   if key == 'down' then 	hold[4] = 0 player.delta = player.delta - vector(0, 0.5) end
+  if key == 'lshift' then	if player.state == 3 then player.state = 2 end end
   player.delta = player.delta:normalized()
   if key == 'up' or key == 'down' or key == 'left' or key == 'right' then
     sum = 0
@@ -119,12 +110,21 @@ end
 
 -- Шаг
 function level:update(dt)
+  -- Движение
+  if hold[1] == 1 then player.delta = player.delta + vector(-1, 0) end
+  if hold[2] == 1 then player.delta = player.delta + vector(1, 0) end
+  if hold[3] == 1 then player.delta = player.delta + vector(0, -1) end
+  if hold[4] == 1 then player.delta = player.delta + vector(0, 1) end
+  player.delta = player.delta:normalized()
+  
   -- Ускорение
-  if player.state > 1 then player.vel = player.vel + player.delta * player.acc end
+  local mult = 1
+  if player.state == 3 then mult = player.runMult end
+  if player.state > 1 then player.vel = player.vel + player.delta * player.acc * mult end
   player.shape:move((player.vel * dt):unpack())
   
   -- Ограничение скорости
-  if player.vel:len() > player.maxspeed then player.vel = player.vel:normalized() * player.maxspeed end
+  if player.vel:len() > player.maxspeed * mult then player.vel = player.vel:normalized() * player.maxspeed * mult end
   
   -- Трение
   if player.state == 1 then player.vel = player.vel * 0.92 end

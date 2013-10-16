@@ -5,8 +5,6 @@
 
 local level = {}
 
-hold = {0, 0, 0, 0}
-
 -- Столкновения
 
 -- Состояния: 1 - стоит, 2 - идет, 3 - бежит
@@ -36,10 +34,10 @@ function level:keypressed(key)
   if key == 'left' or key == 'right' or key == 'up' or key == 'down' then
     if player.state ~= 0 then if player.state < 3 then player.state = 2 else player.state = 3 end end
   end
-  if key == 'left' then  hold[1] = 1 end
-  if key == 'right' then hold[2] = 1 end
-  if key == 'up' then    hold[3] = 1 end
-  if key == 'down' then  hold[4] = 1 end
+  if key == 'left' then  player.hold[1] = 1 end
+  if key == 'right' then player.hold[2] = 1 end
+  if key == 'up' then    player.hold[3] = 1 end
+  if key == 'down' then  player.hold[4] = 1 end
   -- Бег
   if key == 'lshift' then
      if player.state == 2 then player.state = 3 end
@@ -48,16 +46,17 @@ end
 
 -- Обработка нажатия клавиш
 function level:keyreleased(key)
-  if key == 'left' then  	hold[1] = 0 player.delta = player.delta - vector(-0.5, 0) end
-  if key == 'right' then 	hold[2] = 0 player.delta = player.delta - vector(0.5, 0) end
-  if key == 'up' then 		hold[3] = 0 player.delta = player.delta - vector(0, -0.5) end
-  if key == 'down' then 	hold[4] = 0 player.delta = player.delta - vector(0, 0.5) end
+  if key == 'left' then  	player.hold[1] = 0 player.delta = player.delta - vector(-0.5, 0) end
+  if key == 'right' then 	player.hold[2] = 0 player.delta = player.delta - vector(0.5, 0) end
+  if key == 'up' then 		player.hold[3] = 0 player.delta = player.delta - vector(0, -0.5) end
+  if key == 'down' then 	player.hold[4] = 0 player.delta = player.delta - vector(0, 0.5) end
   if key == 'lshift' then	if player.state == 3 then player.state = 2 end end
   player.delta = player.delta:normalized()
   if key == 'up' or key == 'down' or key == 'left' or key == 'right' then
     sum = 0
-    for k, v in pairs(hold) do sum = sum + v end
+    for k, v in pairs(player.hold) do sum = sum + v end
     if sum == 0 then
+      -- Никакие из стрелок не нажаты - останавливаем движение
       player.delta = vector(0, 0)
       if player.state > 1 then 
         player.state = 1 
@@ -85,15 +84,12 @@ end
 -- Вход на уровень
 function level:enter()
   collider = hc(100, on_collide, end_collide)
-  
   -- Создание объекта игрока
   player = player0(300, 200)
-  
   -- Добавление объектов в таблицу
   table.insert(objects, player)
   table.insert(objects, baseObject(400, 100, 200, 100, "terrain"))
-  table.insert(objects, baseObject(-100, -100, 300, 300, "terrain"))
-  
+  table.insert(objects, baseObject(-100, -100, 300, 300, "terrain")) 
   -- Плавный переход
   fade = {255, 255, 255, 255}
   timer.tween(0.5, fade, {[4] = 0}, 'out-quad')
@@ -110,30 +106,11 @@ end
 
 -- Шаг
 function level:update(dt)
-  -- Движение
-  if hold[1] == 1 then player.delta = player.delta + vector(-1, 0) end
-  if hold[2] == 1 then player.delta = player.delta + vector(1, 0) end
-  if hold[3] == 1 then player.delta = player.delta + vector(0, -1) end
-  if hold[4] == 1 then player.delta = player.delta + vector(0, 1) end
-  player.delta = player.delta:normalized()
-  
-  -- Ускорение
-  local mult = 1
-  if player.state == 3 then mult = player.runMult end
-  if player.state > 1 then player.vel = player.vel + player.delta * player.acc * mult end
-  player.shape:move((player.vel * dt):unpack())
-  
-  -- Ограничение скорости
-  if player.vel:len() > player.maxspeed * mult then player.vel = player.vel:normalized() * player.maxspeed * mult end
-  
-  -- Трение
-  if player.state == 1 then player.vel = player.vel * 0.92 end
-  
+  player:update(dt)
   -- Плавное перемещение камеры
   local d = vector(player.shape:center()) - vector(cam:pos())
   local dist = d:len()
   cam:move((d:normalized() * (dist / 30)):unpack())
-  
   -- Шаг движка столкновений
   collider:update(dt)
 end

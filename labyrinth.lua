@@ -21,9 +21,6 @@ function on_collide(dt, shape_one, shape_two, dx, dy)
       other = shape_one
       ddx, ddy = -dx, -dy
     end
-    x1, y1, x2, y2  = other:bbox()
-    px, py = player:center()
-    x3, y3, x4, y4 = player:bbox()
     -- Ограничение вектора скорости по одной из осей
     if math.abs(dx) > 0 then
       player.vel = player.vel:permul(vector(0, 1))

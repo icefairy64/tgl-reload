@@ -3,6 +3,8 @@
 -- icefairy64 (ishido.uu@gmail.com), 2013
 -- Главный модуль
 
+bases = {}
+
 gamestate = require "hump.gamestate"
 vector = require "hump.vector"
 camera = require "hump.camera"
@@ -10,11 +12,11 @@ timer = require "hump.timer"
 
 hc = require "HardonCollider"
 
-baseObject = require "objects.base"
-playerLab = require "objects.player"
+bases.object = require "objects.base"
+bases.playerLab = require "objects.player"
 
-baseEnemy = require "objects.enemies.base"
-enemy = require "objects.enemies.sample"
+bases.enemy = require "objects.enemies.base"
+bases.enemySample = require "objects.enemies.sample"
 
 title = require "title"
 labyrinth = require "labyrinth"
@@ -44,8 +46,8 @@ function love.load()
   gamestate.switch(title)
   gamestate.registerEvents({'keypressed', 'keyreleased'})
   
-  font = love.graphics.newImageFont('font_01.png', 'abcdefghijklmnopqrstuvwxyz!?.;,"`()1234567890 ')
-  love.graphics.setFont(font)
+  --font = love.graphics.newImageFont('font_01.png', 'abcdefghijklmnopqrstuvwxyz!?.;,"`()1234567890 ')
+  --love.graphics.setFont(font)
 end
 
 function love.keypressed(key)
@@ -54,9 +56,9 @@ end
 
 -- Отрисовка отладочной информации
 function debug_draw()
-  love.graphics.printf('tgl reload\nunder development', 0, wnd_h - 48, wnd_w - 32, 'right')
+  love.graphics.printf('TGL Reload\nUnder development', 0, wnd_h - 48, wnd_w - 32, 'right')
   local x, y = cam:pos()
-  love.graphics.print('fps ' .. tostring(love.timer.getFPS()) .. '\ncamera position ' .. tostring(math.floor(x)) .. ' ' .. tostring(math.floor(y)), 32, 32)
+  love.graphics.print('FPS ' .. tostring(love.timer.getFPS()) .. '\nCamera position ' .. tostring(math.floor(x)) .. ' ' .. tostring(math.floor(y)), 32, 32)
 end
 
 -- Отрисовка

@@ -85,12 +85,12 @@ end
 function level:enter()
   collider = hc(100, on_collide, end_collide)
   -- Создание объекта игрока
-  player = playerLab(300, 200)
+  player = bases.playerLab(300, 200)
   -- Добавление объектов в таблицу
   table.insert(objects, player)
-  table.insert(objects, baseObject(400, 100, 200, 100, "terrain"))
-  table.insert(objects, baseObject(-100, -100, 300, 300, "terrain"))
-  table.insert(objects, enemy(100, 400))
+  table.insert(objects, bases.object(400, 100, 200, 100, "terrain"))
+  table.insert(objects, bases.object(-100, -100, 300, 300, "terrain"))
+  table.insert(objects, bases['enemySample'](100, 400))
   -- Плавный переход
   fade = {255, 255, 255, 255}
   timer.tween(0.5, fade, {[4] = 0}, 'out-quad')
@@ -100,8 +100,10 @@ end
 function level:draw()
   if #objects > 0 then
     for id, object in pairs(objects) do
-      love.graphics.setColor(object.color)
-      object.shape:draw('line')
+      if object.visible then 
+        love.graphics.setColor(object.color)
+        object.shape:draw('line')
+      end
     end
   end
 end

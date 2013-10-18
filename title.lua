@@ -47,7 +47,7 @@ function title:draw()
     love.graphics.point(stars[i][1], stars[i][2])
   end
   love.graphics.setColor(255, 255, 255, text_opacity)
-  love.graphics.print('press enter', 128, wnd_h / 2)
+  love.graphics.print('Press Enter', 128, wnd_h / 2)
 end
 
 -- Нажатие кнопки

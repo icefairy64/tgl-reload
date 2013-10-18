@@ -22,7 +22,11 @@ function player:collide(objectShape, dx, dy)
     self.shape:move(dx, dy)
   end
   if objectShape.parent.type == "enemy" then
-    
+    if not self.invicible then
+      self.invicible = true
+      timer.add(2, function() self.invicible = false; self.visible = true end)
+      timer.addPeriodic(0.04, function() self.visible = not self.visible end, 48)
+    end
   end
 end
 
@@ -52,7 +56,7 @@ end
 
 -- Создание объекта
 function player:new(x, y)
-  local fields = baseObject(x, y, 48, 32, "player")
+  local fields = bases.object(x, y, 48, 32, "player")
   fields.vel = vector(0, 0)
   fields.delta = vector(0, 0)
   fields.state = 1
@@ -61,6 +65,7 @@ function player:new(x, y)
   fields.acc = 70
   fields.hold = {0, 0, 0, 0}
   fields.color = {64, 255, 255, 128}
+  fields.invicible = false
   return setmetatable(fields, player)
 end
 

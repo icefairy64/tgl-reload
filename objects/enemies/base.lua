@@ -7,7 +7,7 @@ local base = {}
 
 -- Создание
 function base:new(x, y, w, h, type, health)
-  local fields = baseObject(x, y, w, h, "enemy")
+  local fields = bases.object(x, y, w, h, "enemy")
   fields.enemyType = type
   fields.health = health
   fields.color = {255, 64, 96, 128}

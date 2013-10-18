@@ -15,7 +15,7 @@ end
 
 -- Создание
 function sample:new(x, y)
-  fields = baseEnemy(x, y, 48, 32, "sample", 10000)
+  local fields = bases.enemy(x, y, 48, 32, "sample", 10000)
   fields.bx, fields.by = x, y
   fields.phase = 0
   fields.amp = 300

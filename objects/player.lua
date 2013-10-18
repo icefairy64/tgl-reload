@@ -1,29 +1,34 @@
 
 -- TGL Reload
 -- icefairy64 (ishido.uu@gmail.com), 2013
--- Методы player'а
+-- Объект player
 
 local player = {}
 player.__index = player
 
 -- Столкновение с другим объектом
 function player:collide(objectShape, dx, dy)
-  -- Ограничение вектора скорости по одной из осей
-  if math.abs(dx) > 0 then
-    self.vel = self.vel:permul(vector(0, 1))
+  if objectShape.parent.type == "terrain" then
+    -- Ограничение вектора скорости по одной из осей
+    if math.abs(dx) > 0 then
+      self.vel = self.vel:permul(vector(0, 1))
+    end
+    if math.abs(dy) > 0 then
+      self.vel = self.vel:permul(vector(1, 0))
+    end
+    -- Выключение бега
+    if self.state == 3 then self.state = 2 end
+    -- Устранение столкновения
+    self.shape:move(dx, dy)
   end
-  if math.abs(dy) > 0 then
-    self.vel = self.vel:permul(vector(1, 0))
+  if objectShape.parent.type == "enemy" then
+    
   end
-  -- Выключение бега
-  if self.state == 3 then self.state = 2 end
-  -- Устранение столкновения
-  self.shape:move(dx, dy)
 end
 
 -- Шаг
 function player:update(dt)
-  -- Движение
+  -- Управление
   if self.hold[1] == 1 then self.delta = self.delta + vector(-1, 0) end
   if self.hold[2] == 1 then self.delta = self.delta + vector(1, 0) end
   if self.hold[3] == 1 then self.delta = self.delta + vector(0, -1) end
@@ -46,7 +51,7 @@ function player:__tostring()
 end
 
 -- Создание объекта
-function player:create(x, y)
+function player:new(x, y)
   local fields = baseObject(x, y, 48, 32, "player")
   fields.vel = vector(0, 0)
   fields.delta = vector(0, 0)
@@ -55,8 +60,9 @@ function player:create(x, y)
   fields.runMult = 1.6
   fields.acc = 70
   fields.hold = {0, 0, 0, 0}
+  fields.color = {64, 255, 255, 128}
   return setmetatable(fields, player)
 end
 
 -- Модуль
-return setmetatable({ }, { __call = function(_, ...) return player:create(...) end, __index = player})
+return setmetatable({ }, { __call = function(_, ...) return player:new(...) end, __index = player})

@@ -13,10 +13,25 @@ local function createShape(x, y, w, h, group)
   return shape
 end
 
+--Шаг
+function base:update(dt)
+  
+end
+
+function base:init()
+  self.shape.parent = self
+  return self
+end
+
 -- Создание объекта
-function base:create(x, y, w, h, group)
-  return setmetatable({ shape = createShape(x, y, w, h, group), type = group }, base)
+function base:new(x, y, w, h, group)
+  fields = {}
+  fields.shape = createShape(x, y, w, h, group)
+  if not group then group = "base" end
+  fields.type = group
+  fields.color = {64, 255, 96, 128}
+  return setmetatable(fields, base):init()
 end
 
 -- Модуль
-return setmetatable({ }, { __call = function(_, ...) return base:create(...) end })
+return setmetatable({ }, { __call = function(_, ...) return base:new(...) end })

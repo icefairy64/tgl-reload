@@ -11,7 +11,10 @@ timer = require "hump.timer"
 hc = require "HardonCollider"
 
 baseObject = require "objects.base"
-player0 = require "objects.player"
+playerLab = require "objects.player"
+
+baseEnemy = require "objects.enemies.base"
+enemy = require "objects.enemies.sample"
 
 title = require "title"
 labyrinth = require "labyrinth"
@@ -34,6 +37,7 @@ wnd_h = 720
 -- Загрузка
 function love.load()
   love.graphics.setMode(wnd_w, wnd_h, false, true, 2)
+  love.graphics.setCaption("TGL Reload")
   
   cam = camera(0, 0)
   
@@ -44,9 +48,15 @@ function love.load()
   love.graphics.setFont(font)
 end
 
+function love.keypressed(key)
+  if key == "escape" then love.event.push('quit') end
+end
+
 -- Отрисовка отладочной информации
 function debug_draw()
-  love.graphics.printf('tgl reload\nunder development', 0, wnd_h - 64, wnd_w - 32, 'right')
+  love.graphics.printf('tgl reload\nunder development', 0, wnd_h - 48, wnd_w - 32, 'right')
+  local x, y = cam:pos()
+  love.graphics.print('fps ' .. tostring(love.timer.getFPS()) .. '\ncamera position ' .. tostring(math.floor(x)) .. ' ' .. tostring(math.floor(y)), 32, 32)
 end
 
 -- Отрисовка

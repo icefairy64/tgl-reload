@@ -85,11 +85,12 @@ end
 function level:enter()
   collider = hc(100, on_collide, end_collide)
   -- Создание объекта игрока
-  player = player0(300, 200)
+  player = playerLab(300, 200)
   -- Добавление объектов в таблицу
   table.insert(objects, player)
   table.insert(objects, baseObject(400, 100, 200, 100, "terrain"))
-  table.insert(objects, baseObject(-100, -100, 300, 300, "terrain")) 
+  table.insert(objects, baseObject(-100, -100, 300, 300, "terrain"))
+  table.insert(objects, enemy(100, 400))
   -- Плавный переход
   fade = {255, 255, 255, 255}
   timer.tween(0.5, fade, {[4] = 0}, 'out-quad')
@@ -99,6 +100,7 @@ end
 function level:draw()
   if #objects > 0 then
     for id, object in pairs(objects) do
+      love.graphics.setColor(object.color)
       object.shape:draw('line')
     end
   end
@@ -106,11 +108,13 @@ end
 
 -- Шаг
 function level:update(dt)
-  player:update(dt)
+  for id, object in pairs(objects) do
+    if object.type ~= "base" then object:update(dt) end
+  end
   -- Плавное перемещение камеры
   local d = vector(player.shape:center()) - vector(cam:pos())
   local dist = d:len()
-  cam:move((d:normalized() * (dist / 30)):unpack())
+  cam:move((d:normalized() * (dist / 10)):unpack())
   -- Шаг движка столкновений
   collider:update(dt)
 end

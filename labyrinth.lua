@@ -46,7 +46,7 @@ function level:keypressed(key)
   else
     editor:keypressed(key)
   end
-  if key == 's' then
+  if key == 'f5' then
     save('state.snapshot')
   end
 end
@@ -73,6 +73,18 @@ function level:keyreleased(key)
     end
   else
     editor:keyreleased(key)
+  end
+end
+
+function level:mousepressed(x, y, button)
+  if editing then
+    editor:mousepressed(x, y, button)
+  end
+end
+
+function level:mousereleased(x, y, button)
+  if editing then
+    editor:mousereleased(x, y, button)
   end
 end
 
@@ -117,6 +129,7 @@ function level:draw()
       end
     end
   end
+  editor:draw()
 end
 
 -- Шаг

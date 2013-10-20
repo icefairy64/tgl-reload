@@ -27,6 +27,7 @@ editor = require "editor"
 objects = {}
 player = {}
 cam = {}
+objectNames = {}
 fade = {255, 255, 255, 0}
 health, healthMax = 80, 80
 chip, chipMax = 50, 50
@@ -50,7 +51,11 @@ function love.load()
   
   collider = hc(100, on_collide, end_collide)
   gamestate.switch(title)
-  gamestate.registerEvents({'keypressed', 'keyreleased'})
+  gamestate.registerEvents({'keypressed', 'keyreleased', 'mousepressed', 'mousereleased'})
+  
+  for name, obj in pairs(bases) do
+    table.insert(objectNames, name)
+  end
   
   --font = love.graphics.newImageFont('font_01.png', 'abcdefghijklmnopqrstuvwxyz!?.;,"`()1234567890 ')
   --love.graphics.setFont(font)
@@ -58,7 +63,7 @@ end
 
 function love.keypressed(key)
   if key == "escape" then love.event.push('quit') end
-  if key == "l" then load('state.snapshot') end
+  if key == "f7" then load('state.snapshot') end
   if key == 'e' then editing = not editing end
 end
 
@@ -85,6 +90,7 @@ function save(filename)
     end
   end
   out:close()
+  echo = echo .. '\nLevel saved\n'
 end
 
 function load(filename, ...)
@@ -148,6 +154,7 @@ function load(filename, ...)
   if gs == 'labyrinth' then
     gamestate.switch(labyrinth, false)
   end
+  echo = echo .. '\nLevel loaded\n'
 end
 
 -- Отрисовка

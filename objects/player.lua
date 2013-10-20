@@ -8,7 +8,7 @@ player.__index = player
 
 -- Столкновение с другим объектом
 function player:collide(objectShape, dx, dy)
-  if objectShape.parent.type == "terrain" then
+  if objectShape.parent.type == "terrain" or objectShape.parent.type == "base" then
     -- Ограничение вектора скорости по одной из осей
     if math.abs(dx) > 0 then
       self.vel = self.vel:permul(vector(0, 1))

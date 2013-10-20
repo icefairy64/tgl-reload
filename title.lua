@@ -11,7 +11,7 @@ local text_phase = 0
 -- Помощники
 
 start = function ()
-  gamestate.switch(labyrinth) 
+  gamestate.switch(labyrinth, true) 
 end
 
 -- Методы

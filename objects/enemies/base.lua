@@ -11,6 +11,7 @@ function base:new(x, y, w, h, type, health)
   fields.enemyType = type
   fields.health = health
   fields.color = {255, 64, 96, 128}
+  fields.module = 'enemy'
   table.insert(fields.saveFields, 'enemyType')
   return setmetatable(fields, base)
 end

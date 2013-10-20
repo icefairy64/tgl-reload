@@ -61,6 +61,7 @@ function player:new(x, y)
   fields.hold = {0, 0, 0, 0}
   fields.color = {64, 255, 255, 128}
   fields.invicible = false
+  fields.module = 'playerLab'
   fields.saveFields = { }
   return setmetatable(fields, player)
 end

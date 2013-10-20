@@ -18,9 +18,13 @@ local function getField(self, name)
 end
 
 local function save(self)
-  local temp = self.type .. ': '
-  local x, y = self.shape:center()
-  temp = temp .. 'x=' .. tostring(x) .. ' y=' .. tostring(y)
+  local temp = self.type .. ':' .. self.module .. ' '
+  local x, y, w, h = self.shape:bbox()
+  x = math.floor(x)
+  y = math.floor(y)
+  w = math.floor(w) - x
+  h = math.floor(h) - y
+  temp = temp .. 'x=' .. tostring(x) .. ' y=' .. tostring(y) .. ' w=' .. tostring(w) .. ' h=' .. tostring(h)
   if #self.saveFields > 0 then
     temp = temp .. ' '
     for i = 1, #self.saveFields do
@@ -55,6 +59,7 @@ function base:new(x, y, w, h, group)
   fields.type = group
   fields.color = {64, 255, 96, 128}
   fields.visible = true
+  fields.module = 'object'
   fields.saveFields = { }
   return setmetatable(fields, base):init()
 end

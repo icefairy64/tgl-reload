@@ -13,6 +13,26 @@ local function createShape(x, y, w, h, group)
   return shape
 end
 
+local function getField(self, name)
+  return name .. '=' .. tostring(self[name])
+end
+
+local function save(self)
+  local temp = self.type .. ': '
+  local x, y = self.shape:center()
+  temp = temp .. 'x=' .. tostring(x) .. ' y=' .. tostring(y)
+  if #self.saveFields > 0 then
+    temp = temp .. ' '
+    for i = 1, #self.saveFields do
+      temp = temp .. getField(self, self.saveFields[i])
+      if i < #self.saveFields then
+        temp = temp .. ' '
+      end
+    end
+  end
+  return temp
+end
+
 --Шаг
 function base:update(dt)
   
@@ -23,6 +43,10 @@ function base:init()
   return self
 end
 
+function base:__tostring()
+  return save(self)
+end
+
 -- Создание объекта
 function base:new(x, y, w, h, group)
   fields = {}
@@ -31,8 +55,9 @@ function base:new(x, y, w, h, group)
   fields.type = group
   fields.color = {64, 255, 96, 128}
   fields.visible = true
+  fields.saveFields = { }
   return setmetatable(fields, base):init()
 end
 
 -- Модуль
-return setmetatable({ }, { __call = function(_, ...) return base:new(...) end })
+return setmetatable({ save = save }, { __call = function(_, ...) return base:new(...) end })

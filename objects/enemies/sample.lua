@@ -19,6 +19,10 @@ function sample:new(x, y)
   fields.bx, fields.by = x, y
   fields.phase = 0
   fields.amp = 300
+  table.insert(fields.saveFields, 'bx')
+  table.insert(fields.saveFields, 'by')
+  table.insert(fields.saveFields, 'phase')
+  table.insert(fields.saveFields, 'amp')
   return setmetatable(fields, sample)
 end
 

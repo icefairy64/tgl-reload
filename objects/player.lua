@@ -25,7 +25,7 @@ function player:collide(objectShape, dx, dy)
     if not self.invicible then
       self.invicible = true
       timer.add(2, function() self.invicible = false; self.visible = true end)
-      timer.addPeriodic(0.04, function() self.visible = not self.visible end, 48)
+      timer.addPeriodic(0.04, function() self.visible = not self.visible end, 47)
     end
   end
 end
@@ -49,11 +49,6 @@ function player:update(dt)
   if self.state == 1 then self.vel = self.vel * 0.92 end
 end
 
--- Вывод строки
-function player:__tostring()
-  return self.type .. ": " .. tonumber(self.state)
-end
-
 -- Создание объекта
 function player:new(x, y)
   local fields = bases.object(x, y, 48, 32, "player")
@@ -66,6 +61,7 @@ function player:new(x, y)
   fields.hold = {0, 0, 0, 0}
   fields.color = {64, 255, 255, 128}
   fields.invicible = false
+  fields.saveFields = { }
   return setmetatable(fields, player)
 end
 

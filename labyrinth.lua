@@ -42,6 +42,9 @@ function level:keypressed(key)
   if key == 'lshift' then
      if player.state == 2 then player.state = 3 end
   end
+  if key == 's' then
+    save('state.snapshot')
+  end
 end
 
 -- Обработка нажатия клавиш

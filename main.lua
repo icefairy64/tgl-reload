@@ -61,6 +61,17 @@ function debug_draw()
   love.graphics.print('FPS ' .. tostring(love.timer.getFPS()) .. '\nCamera position ' .. tostring(math.floor(x)) .. ' ' .. tostring(math.floor(y)), 32, 32)
 end
 
+function save(filename)
+  out = io.open(filename, 'w')
+  for i = 1, #objects do
+    out:write(bases.object.save(objects[i]))
+    if i < #objects then
+      out:write('\n')
+    end
+  end
+  out:close()
+end
+
 -- Отрисовка
 function love.draw()
   cam:attach()

@@ -18,7 +18,7 @@ end
 
 -- Инициализация
 function title:init()
-  for i = 1, 2000 do
+  for i = 1, 700 do
     table.insert(stars, {math.random(wnd_w), math.random(wnd_h), math.random(255), math.random(255), math.random(255) + 256})
   end
 end
@@ -33,8 +33,8 @@ end
 -- Шаг
 function title:update(dt)
   for i = 1, #stars do
-    stars[i][4] = stars[i][4] + stars[i][5] / 10240
-    stars[i][1] = (stars[i][1] - stars[i][3] / 70) % wnd_w
+    --stars[i][4] = stars[i][4] + stars[i][5] / 10240
+    stars[i][2] = (stars[i][2] - stars[i][3] * (dt *60) / 70) % wnd_h
   end
   text_phase = text_phase + 0.05
   text_opacity = (math.sin(text_phase) * 128) + 127
@@ -42,8 +42,9 @@ end
 
 -- Отрисовка
 function title:draw()
+  love.graphics.setColor(255, 255, 255, 255)
   for i = 1, #stars do
-    love.graphics.setColor(255, 255, 255, ((math.sin(stars[i][4]) * (stars[i][3] / 2)) + (stars[i][3] / 2)) * 0.7)
+    --love.graphics.setColor(255, 255, 255, ((math.sin(stars[i][4]) * (stars[i][3] / 2)) + (stars[i][3] / 2)) * 0.7)
     love.graphics.point(stars[i][1], stars[i][2])
   end
   love.graphics.setColor(255, 255, 255, text_opacity)

@@ -44,7 +44,7 @@ wnd_h = 720
 
 -- Загрузка
 function love.load()
-  love.graphics.setMode(wnd_w, wnd_h, false, true, 2)
+  love.graphics.setMode(wnd_w, wnd_h, false, false, 2)
   love.graphics.setCaption("TGL Reload")
   
   cam = camera(0, 0)
@@ -98,6 +98,7 @@ function load(filename, ...)
   local gs = ''
   if #objects > 0 then
     for i = 1, #objects do
+      collider:remove(objects[#objects - i + 1].shape)
       table.remove(objects)
     end
   end

@@ -8,9 +8,9 @@ sample.__index = sample
 
 -- Шаг
 function sample:update(dt)
-  self.phase = self.phase + 0.07
+  self.phase = self.phase + 0.07 * (dt * 60) 
   if self.phase > 6.28 then self.phase = 0 end
-  self.shape:move(math.sin(self.phase) * self.amp, 0)
+  self.shape:move(math.sin(self.phase) * self.amp * (dt * 60), 0)
 end
 
 -- Создание

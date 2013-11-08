@@ -46,7 +46,7 @@ function player:update(dt)
   -- Ограничение скорости
   if self.vel:len() > self.maxspeed * mult then self.vel = self.vel:normalized() * self.maxspeed * mult end 
   -- Трение
-  if self.state == 1 then self.vel = self.vel * 0.92 end
+  if self.state == 1 then self.vel = self.vel * math.min(1 / (dt * 65), 0.99) end
 end
 
 -- Создание объекта

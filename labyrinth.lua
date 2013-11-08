@@ -141,7 +141,7 @@ function level:update(dt)
     -- Плавное перемещение камеры
     local d = vector(player.shape:center()) - vector(cam:pos())
     local dist = d:len()
-    cam:move((d:normalized() * (dist / 10)):unpack())
+    cam:move((d:normalized() * (dist / 10) * (dt * 60)):unpack())
     -- Шаг движка столкновений
     collider:update(dt)
   else

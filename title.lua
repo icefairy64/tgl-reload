@@ -7,6 +7,7 @@ local title = {}
 local stars = {}
 local text_opacity = 0
 local text_phase = 0
+local speed = {0}
 
 -- Помощники
 
@@ -27,16 +28,17 @@ end
 function title:enter()
   cam:lookAt(wnd_w / 2, wnd_h / 2)
   fade = {0, 0, 0, 255}
-    timer.tween(2, fade, {[4] = 0}, 'out-quad')
+  timer.tween(2, fade, {[4] = 0}, 'out-quad')
+  timer.tween(5, speed, {[1] = 4}, 'out-quad')
 end
 
 -- Шаг
 function title:update(dt)
   for i = 1, #stars do
-    --stars[i][4] = stars[i][4] + stars[i][5] / 10240
-    stars[i][2] = (stars[i][2] - stars[i][3] * (dt *60) / 70) % wnd_h
+    stars[i][4] = stars[i][4] + stars[i][5] / 10240
+    stars[i][2] = (stars[i][2] - stars[i][3] * speed[1] * (dt * 60) / 70) % wnd_h
   end
-  text_phase = text_phase + 0.05
+  text_phase = text_phase + 0.05 * (dt * 60)
   text_opacity = (math.sin(text_phase) * 128) + 127
 end
 
@@ -44,8 +46,8 @@ end
 function title:draw()
   love.graphics.setColor(255, 255, 255, 255)
   for i = 1, #stars do
-    --love.graphics.setColor(255, 255, 255, ((math.sin(stars[i][4]) * (stars[i][3] / 2)) + (stars[i][3] / 2)) * 0.7)
-    love.graphics.point(stars[i][1], stars[i][2])
+    love.graphics.setColor(255, 255, 255, ((math.sin(stars[i][4]) * (stars[i][3] / 2)) + (stars[i][3] / 2)) * 0.7)
+    love.graphics.rectangle("fill", stars[i][1], stars[i][2], 2, 2)
   end
   love.graphics.setColor(255, 255, 255, text_opacity)
   love.graphics.print('Press Enter', 128, wnd_h / 2)

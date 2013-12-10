@@ -142,6 +142,9 @@ function level:update(dt)
     local d = vector(player.shape:center()) - vector(cam:pos())
     local dist = d:len()
     cam:move((d:normalized() * (dist / 10) * (dt * 60)):unpack())
+    if dist < 0.5 then
+      cam:move(d:unpack())
+    end
     -- Шаг движка столкновений
     collider:update(dt)
   else

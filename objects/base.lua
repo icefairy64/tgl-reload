@@ -53,10 +53,11 @@ end
 
 -- Создание объекта
 function base:new(x, y, w, h, group)
-  fields = {}
-  fields.shape = createShape(x, y, w, h, group)
-  if not group then group = "base" end
-  fields.type = group
+  local fields = {}
+  local gr = group
+  if not gr then gr = "base" end
+  fields.shape = createShape(x, y, w, h, gr)
+  fields.type = gr
   fields.color = {64, 255, 96, 128}
   fields.visible = true
   fields.module = 'object'

@@ -7,7 +7,7 @@ local level = {}
 
 -- Столкновения
 
--- Состояния: 1 - стоит, 2 - идет, 3 - бежит
+-- Состояния: 1 - idle, 2 - ходьба, 3 - бег
 
 function on_collide(dt, shape_one, shape_two, dx, dy)
   if shape_one == player.shape or shape_two == player.shape then

@@ -61,6 +61,8 @@ function base:new(x, y, w, h, group)
   fields.color = {64, 255, 96, 128}
   fields.visible = true
   fields.module = 'object'
+  fields.motion = nil
+  fields.anim = nil
   fields.saveFields = { }
   return setmetatable(fields, base):init()
 end

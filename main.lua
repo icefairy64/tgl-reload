@@ -18,9 +18,12 @@ bases.playerLab = require "objects.player"
 bases.enemy = require "objects.enemies.base"
 bases.enemySample = require "objects.enemies.sample"
 
+motion = require "motion"
+anim = require "animation"
 title = require "title"
 labyrinth = require "labyrinth"
 editor = require "editor"
+motionTest = require "motionTest"
 
 -- Глобальные переменные
 
@@ -33,6 +36,14 @@ health, healthMax = 80, 80
 chip, chipMax = 50, 50
 echo = ''
 editing = false
+
+-- Ресурсы
+
+resources = {}
+resources.sprite = {}
+resources.anim = {}
+resources.motion = {}
+resources.sound = {}
 
 -- Константы
 
@@ -75,6 +86,7 @@ function debug_draw()
   love.graphics.print('FPS ' .. tostring(love.timer.getFPS()) .. '\nCamera position ' .. tostring(math.floor(x)) .. ' ' .. tostring(math.floor(y)), 32, 32)
 end
 
+-- Сохранение
 function save(filename)
   local out = io.open(filename, 'w')
   local gs = ''
@@ -93,6 +105,7 @@ function save(filename)
   echo = echo .. '\nLevel saved\n'
 end
 
+-- Загрузка
 function load(filename, ...)
   local i = 0
   local gs = ''

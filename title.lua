@@ -50,7 +50,7 @@ function title:draw()
     love.graphics.rectangle("fill", stars[i][1], stars[i][2], 2, 2)
   end
   love.graphics.setColor(255, 255, 255, text_opacity)
-  love.graphics.print('Press Enter', 128, wnd_h / 2)
+  love.graphics.print('Press Enter to enter game ("E" in-game: editor)\nPress M to open motion test', 128, wnd_h / 2)
 end
 
 -- Нажатие кнопки
@@ -58,6 +58,8 @@ function title:keypressed(key)
   if key == 'return' then
     fade = {255, 255, 255, 0}
     timer.tween(0.5, fade, {[4] = 255}, 'out-quad', start)
+  end if key == 'm' then
+    gamestate.switch(motionTest)
   end
 end
 

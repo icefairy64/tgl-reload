@@ -55,19 +55,17 @@ wnd_h = 720
 
 -- Загрузка
 function love.load()
-  love.graphics.setMode(wnd_w, wnd_h, false, false, 2)
-  love.graphics.setCaption("TGL Reload")
-  
+  --love.graphics.setMode(wnd_w, wnd_h, false, false, 2)
+  --love.graphics.setCaption("TGL Reload")
+  love.window.setMode(wnd_w, wnd_h, { vsync = false, fsaa = 0 })
+  love.window.setTitle("TGL Reload")
   cam = camera(0, 0)
-  
   collider = hc(100, on_collide, end_collide)
   gamestate.switch(title)
   gamestate.registerEvents({'keypressed', 'keyreleased', 'mousepressed', 'mousereleased'})
-  
   for name, obj in pairs(bases) do
     table.insert(objectNames, name)
   end
-  
   --font = love.graphics.newImageFont('font_01.png', 'abcdefghijklmnopqrstuvwxyz!?.;,"`()1234567890 ')
   --love.graphics.setFont(font)
 end
@@ -120,7 +118,6 @@ function load(filename, ...)
     if i == 1 then
       gs = line
     else
-    
     if i == 2 and not ... then
       local z = 0
       for val in string.gmatch(line, "(%w+)") do
@@ -131,8 +128,7 @@ function load(filename, ...)
         if z == 4 then chipMax = tonumber(val) end
       end
     else
-   
-    local result = {}
+      local result = {}
     for val in string.gmatch(line, ":?(%w+):?") do
       table.insert(result, val)
     end
@@ -159,9 +155,7 @@ function load(filename, ...)
         end
       end
     end
-    
     end
-    
     end 
   end
   player = objects[1]
@@ -176,7 +170,6 @@ function love.draw()
   cam:attach()
   gamestate.draw()
   cam:detach()
-  
   -- HUD
   if fade[4] > 1 then
     love.graphics.setColor(fade)

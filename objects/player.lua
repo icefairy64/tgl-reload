@@ -16,8 +16,6 @@ function player:collide(objectShape, dx, dy)
     if math.abs(dy) > 0 then
       self.vel = self.vel:permul(vector(1, 0))
     end
-    -- Выключение бега
-    if self.state == 3 then self.state = 2 end
     -- Устранение столкновения
     self.shape:move(dx, dy)
   end
@@ -39,12 +37,10 @@ function player:update(dt)
   if self.hold[4] == 1 then self.delta = self.delta + vector(0, 1) end
   self.delta = self.delta:normalized() 
   -- Ускорение
-  local mult = 1
-  if self.state == 3 then mult = self.runMult end
-  if self.state > 1 then self.vel = self.vel + self.delta * self.acc * mult end
+  if self.state > 1 then self.vel = self.vel + self.delta * self.acc end
   self.shape:move((self.vel * dt):unpack()) 
   -- Ограничение скорости
-  if self.vel:len() > self.maxspeed * mult then self.vel = self.vel:normalized() * self.maxspeed * mult end 
+  if self.vel:len() > self.maxspeed then self.vel = self.vel:normalized() * self.maxspeed end 
   -- Трение
   if self.state == 1 then self.vel = self.vel * math.min(1 / (dt * 65), 0.99) end
 end
@@ -55,8 +51,7 @@ function player:new(x, y)
   fields.vel = vector(0, 0)
   fields.delta = vector(0, 0)
   fields.state = 1
-  fields.maxspeed = 300
-  fields.runMult = 1.6
+  fields.maxspeed = 600
   fields.acc = 70
   fields.hold = {0, 0, 0, 0}
   fields.color = {64, 255, 255, 128}

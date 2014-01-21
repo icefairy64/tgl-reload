@@ -7,7 +7,7 @@ local level = {}
 
 -- Столкновения
 
--- Состояния: 1 - idle, 2 - ходьба, 3 - бег
+-- Состояния: 1 - idle, 2 - ходьба
 
 function on_collide(dt, shape_one, shape_two, dx, dy)
   if shape_one == player.shape or shape_two == player.shape then
@@ -39,10 +39,6 @@ function level:keypressed(key)
     if key == 'right' then player.hold[2] = 1 end
     if key == 'up' then    player.hold[3] = 1 end
     if key == 'down' then  player.hold[4] = 1 end
-    -- Бег
-    if key == 'lshift' then
-      if player.state == 2 then player.state = 3 end
-    end
   else
     editor:keypressed(key)
   end
@@ -58,7 +54,6 @@ function level:keyreleased(key)
     if key == 'right' then 	player.hold[2] = 0 player.delta = player.delta - vector(0.5, 0) end
     if key == 'up' then 		player.hold[3] = 0 player.delta = player.delta - vector(0, -0.5) end
     if key == 'down' then 	player.hold[4] = 0 player.delta = player.delta - vector(0, 0.5) end
-    if key == 'lshift' then	if player.state == 3 then player.state = 2 end end
     player.delta = player.delta:normalized()
     if key == 'up' or key == 'down' or key == 'left' or key == 'right' then
       sum = 0

@@ -41,11 +41,17 @@ end
 function motion:start(target)
   target.active = true
   motion:nextPart(target)
+  if target.anim ~= nil then
+    anim:start(target.anim)
+  end
 end
 
 function motion:stop(target)
   timer.cancel(target.timer)
   target.active = false
+  if target.anim ~= nil then
+    anim:stop(target.anim)
+  end
   target = nil
 end
 
